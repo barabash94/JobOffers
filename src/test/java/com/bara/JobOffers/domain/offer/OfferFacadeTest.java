@@ -1,7 +1,8 @@
 package com.bara.JobOffers.domain.offer;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 class OfferFacadeTest {
+
 
 }
