@@ -1,43 +1,46 @@
 package com.bara.JobOffers.domain.login_register;
 
-import com.bara.JobOffers.domain.login_register.dto.UserDataResponseDto;
+import com.bara.JobOffers.domain.login_register.dto.RegisterUserDto;
+import com.bara.JobOffers.domain.login_register.dto.RegistrationResultDto;
+import com.bara.JobOffers.domain.login_register.dto.UserDto;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class LoginFacadeTest {
-    LoginFacade loginFacade = new LoginFacade(new UserRepository());
+    LoginFacade loginFacade = new LoginFacade(new UserRepositoryInMemomryImplement());
 
     @Test
     public void it_should_be_able_to_register() {
         //given
-        UserData user = new UserData("Bara", "simple@email.com", "password");
+        RegisterUserDto user = new RegisterUserDto("Bara", "password");
         //when
-        String register = loginFacade.register(user);
+        RegistrationResultDto register = loginFacade.register(user);
         //then
-        assertThat(register).isEqualTo("User registered successfully");
+        assertThat(register.created()).isEqualTo(true);
 
     }
+
     @Test
     public void it_should_be_able_to_find_user_by_userName() {
         //given
-        UserData user = new UserData("Bara", "simple@email.com", "password");
-         loginFacade.register(user);
-        UserDataResponseDto userFromDataBase = new UserDataResponseDto(user.name(),user.email());
+        RegisterUserDto user = new RegisterUserDto("Bara", "password");
+        RegistrationResultDto registeredUser = loginFacade.register(user);
         //when
-        UserDataResponseDto userToFind= loginFacade.findByUserName(user.name());
+        UserDto userToFind = loginFacade.findByUserName(user.name());
         //then
-        assertThat(userToFind).isEqualTo(userFromDataBase);
+        assertThat(userToFind).isEqualTo(new UserDto(registeredUser.id(),"Bara","password"));
 
 
     }
+
     @Test
     public void it_should_be_able_to_throw_user_not_found_exception_when_user_not_found() {
         //given
-        UserData user = new UserData("Bara", "simple@email.com", "password");
+       RegisterUserDto user = new RegisterUserDto("Bara",  "password");
         loginFacade.register(user);
-        UserDataResponseDto userFromDataBase = new UserDataResponseDto(user.name(),user.email());
+        //when
         //then
         assertThrows(
                 UserNotFoundException.class,
