@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Optional;
 import java.util.UUID;
 
-public class UserRepositoryImplementation implements UserRepository {
+public class UserRepositoryInMemoryImplementation implements UserRepository {
 
     private HashMap<UUID,User> users = new HashMap<>();
 
