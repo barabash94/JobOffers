@@ -34,6 +34,7 @@ dependencies {
 	implementation("org.springframework.data:spring-data-commons:4.2.0-M2")
 	testImplementation 'org.springframework.boot:spring-boot-starter-jackson'
 	testImplementation 'org.wiremock:wiremock-standalone:3.13.2'
+	implementation 'org.springframework.boot:spring-boot-starter-restclient'
 
 
 }
