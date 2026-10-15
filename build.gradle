@@ -28,9 +28,52 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	implementation 'org.springframework.boot:spring-boot-starter-webmvc'
 	testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
+	testImplementation 'org.testcontainers:testcontainers'
+	testImplementation 'org.testcontainers:junit-jupiter:1.21.3'
+	testImplementation 'org.testcontainers:mongodb:1.21.3'
+	implementation("org.springframework.data:spring-data-commons:4.2.0-M2")
+	testImplementation 'org.springframework.boot:spring-boot-starter-jackson'
+	testImplementation 'org.wiremock:wiremock-standalone:3.13.2'
+
 
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+sourceSets {
+	integration {
+		java {
+			srcDirs = ['src/integration/java']
+		}
+		resources {
+			srcDirs = ['src/integration/resources']
+		}
+
+		compileClasspath += sourceSets.main.output
+		runtimeClasspath += sourceSets.main.output
+	}
+}
+
+
+configurations {
+	integrationImplementation.extendsFrom testImplementation
+	integrationRuntimeOnly.extendsFrom testRuntimeOnly
+
+}
+
+tasks.register('integrationTest', Test) {
+	description = 'Runs integration tests'
+	group = 'verification'
+
+	testClassesDirs = sourceSets.integration.output.classesDirs
+	classpath = sourceSets.integration.runtimeClasspath
+
+	useJUnitPlatform()
+
+	shouldRunAfter tasks.named('test')
+}
+
+tasks.named('check') {
+	dependsOn tasks.named('integrationTest')
 }
