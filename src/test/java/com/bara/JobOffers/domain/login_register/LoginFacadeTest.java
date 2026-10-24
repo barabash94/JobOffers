@@ -9,7 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class LoginFacadeTest {
-    LoginFacade loginFacade = new LoginFacade(new UserRepositoryInMemomryImplement());
+    LoginFacade loginFacade = new LoginFacade(new UserRepositoryInMemoryImplementation());
 
     @Test
     public void it_should_be_able_to_register() {
