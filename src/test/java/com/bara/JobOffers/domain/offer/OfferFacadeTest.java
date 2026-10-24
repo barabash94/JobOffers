@@ -2,6 +2,7 @@ package com.bara.JobOffers.domain.offer;
 
 import com.bara.JobOffers.domain.offer.dto.OfferRequestDto;
 import com.bara.JobOffers.domain.offer.dto.OfferResponseDto;
+import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -91,6 +92,41 @@ class OfferFacadeTest {
         // then
         assertThat(thrown)
                 .isInstanceOf(OfferDuplicateException.class);
+    }
+
+    @Test
+    public void should_throw_not_found_exception_when_offer_not_found() {
+        // given
+        OfferFacade offerFacade = new OfferFacadeTestConfig(List.of()).offerFacadeForTests();
+
+        // when
+        Throwable thrown = catchThrowable(() -> offerFacade.findOfferById("100"));
+
+        // then
+        AssertionsForClassTypes.assertThat(thrown)
+                .isInstanceOf(OfferNotFoundException.class)
+                .hasMessage("Offer with id 100 not found");
+    }
+
+    @Test
+    public void should_skip_existing_offers_when_fetching_and_saving_offers() {
+        // given
+        OfferFacade offerFacade = new OfferFacadeTestConfig().offerFacadeForTests();
+
+        // when
+        List<OfferResponseDto> result = offerFacade.fetchAllOffersAndSaveAllIfNotExists();
+
+        // then
+        assertThat(result).hasSize(4);
+        assertThat(result)
+                .extracting(OfferResponseDto::offerUrl)
+                .containsExactlyInAnyOrder(
+                        "https://example.com/jobs/offer-3",
+                        "https://example.com/jobs/offer-4",
+                        "https://example.com/jobs/offer-5",
+                        "https://example.com/jobs/offer-6"
+                );
+
     }
 }
 
