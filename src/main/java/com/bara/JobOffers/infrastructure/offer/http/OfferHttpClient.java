@@ -54,7 +54,7 @@ public class OfferHttpClient implements OfferFetchable {
     }
 
     private String getUrlForService(String service) {
-        return uri + ":" + service;
+        return uri + service;
     }
 }
 

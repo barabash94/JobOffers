@@ -2,13 +2,13 @@ package com.bara.JobOffers.features;
 
 import com.bara.JobOffers.BaseIntegrationTest;
 import com.bara.JobOffers.SampleJobOfferResponse;
-import com.bara.JobOffers.domain.offer.OfferFetchable;
-import com.bara.JobOffers.domain.offer.dto.JobOfferResponse;
+import com.bara.JobOffers.domain.offer.dto.OfferResponseDto;
 import com.bara.JobOffers.infrastructure.offer.scheduler.HttpOffersScheduler;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 
@@ -26,10 +26,14 @@ public class TypicalScenarioUserWantToSeeOffersIntegrationTest extends BaseInteg
                 .willReturn(WireMock.aResponse()
                         .withStatus(HttpStatus.OK.value())
                         .withHeader("Content-Type", "application/json")
-                        .withBody(bodyWithZeroOffersJson())));
+                        .withBody(bodyWithFourOffersJson())));
 
 
-        httpOffersScheduler.fetchAllOffersAndSaveAllIfNotExists();
+        // step 2: scheduler ran 1st time and made GET to external server and system added 0 offers to database
+        // given && when
+        List<OfferResponseDto> newOffers = httpOffersScheduler.fetchAllOffersAndSaveAllIfNotExists();
+        // then
+        assertThat(newOffers).size().isEqualTo(4);
 
         //step 2: scheduler ran 1st time and made GET to external server and system added 0 offers to database
         //step 3: user tried to get JWT token by requesting POST /token with username=someUser, password=somePassword and system returned UNAUTHORIZED(401)

@@ -25,13 +25,13 @@ public class OfferFacade {
     }
 
     public OfferResponseDto findOfferById(String id) {
-        return offerRepository.findOfferById(id)
+        return offerRepository.findById(id)
                 .map(OfferMapper::mapFromOfferToOfferDto).orElseThrow(() -> new OfferNotFoundException(id));
     }
 
     public OfferResponseDto saveOffer(OfferRequestDto offerRequestDto) {
         Offer offer = OfferMapper.mapFromOfferRequestDtoToOffer(offerRequestDto);
-        Offer saved = offerRepository.saveOffer(offer);
+        Offer saved = offerRepository.save(offer);
         return OfferMapper.mapFromOfferToOfferDto(saved);
     }
 
