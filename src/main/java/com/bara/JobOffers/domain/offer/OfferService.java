@@ -1,8 +1,10 @@
 package com.bara.JobOffers.domain.offer;
 
+import org.springframework.stereotype.Component;
+
 import java.util.List;
 import java.util.stream.Collectors;
-
+@Component
 public class OfferService {
     OfferRepository offerRepository;
     OfferFetchable offerFetcher;
@@ -14,9 +16,9 @@ public class OfferService {
 
     List<Offer> fetchAllOffersAndSaveAllIfNotExists() {
         List<Offer> jobOffers = fetchOffers();
-        final List<Offer> offers = filterNotExistingOffers(jobOffers);
+//        final List<Offer> offers = filterNotExistingOffers(jobOffers);
         try {
-            return offerRepository.saveAll(offers);
+            return jobOffers;
         } catch (OfferDuplicateException duplicateKeyException) {
             throw new OfferSavingException(duplicateKeyException.getMessage());
         }

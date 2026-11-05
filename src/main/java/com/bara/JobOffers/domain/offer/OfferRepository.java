@@ -1,6 +1,7 @@
 package com.bara.JobOffers.domain.offer;
 
 import com.bara.JobOffers.domain.offer.dto.OfferResponseDto;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;

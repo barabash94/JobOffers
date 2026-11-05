@@ -2,6 +2,7 @@ package com.bara.JobOffers.domain.offer;
 
 import com.bara.JobOffers.domain.offer.dto.OfferRequestDto;
 import com.bara.JobOffers.domain.offer.dto.OfferResponseDto;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
