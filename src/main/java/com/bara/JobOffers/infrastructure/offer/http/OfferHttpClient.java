@@ -20,12 +20,12 @@ public class OfferHttpClient implements OfferFetchable {
 
     private RestTemplate restTemplate;
     private String uri;
-    private int port;
 
-    public OfferHttpClient(RestTemplate restTemplate, String uri, int port) {
+
+    public OfferHttpClient(RestTemplate restTemplate, String uri) {
         this.restTemplate = restTemplate;
         this.uri = uri;
-        this.port = port;
+
     }
 
 
@@ -54,7 +54,7 @@ public class OfferHttpClient implements OfferFetchable {
     }
 
     private String getUrlForService(String service) {
-        return uri + ":" + port + service;
+        return uri + service;
     }
-    }
+}
 

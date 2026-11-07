@@ -2,6 +2,7 @@ package com.bara.JobOffers.domain.offer;
 
 import com.bara.JobOffers.domain.offer.dto.OfferRequestDto;
 import com.bara.JobOffers.domain.offer.dto.OfferResponseDto;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -24,13 +25,13 @@ public class OfferFacade {
     }
 
     public OfferResponseDto findOfferById(String id) {
-        return offerRepository.findOfferById(id)
+        return offerRepository.findById(id)
                 .map(OfferMapper::mapFromOfferToOfferDto).orElseThrow(() -> new OfferNotFoundException(id));
     }
 
     public OfferResponseDto saveOffer(OfferRequestDto offerRequestDto) {
         Offer offer = OfferMapper.mapFromOfferRequestDtoToOffer(offerRequestDto);
-        Offer saved = offerRepository.saveOffer(offer);
+        Offer saved = offerRepository.save(offer);
         return OfferMapper.mapFromOfferToOfferDto(saved);
     }
 
