@@ -5,6 +5,7 @@ import com.bara.JobOffers.SampleJobOfferResponse;
 import com.bara.JobOffers.domain.offer.dto.OfferResponseDto;
 import com.bara.JobOffers.infrastructure.offer.scheduler.HttpOffersScheduler;
 import com.github.tomakehurst.wiremock.client.WireMock;
+import com.jayway.jsonpath.TypeRef;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,7 +17,9 @@ import tools.jackson.core.type.TypeReference;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -83,18 +86,56 @@ public class TypicalScenarioUserWantToSeeOffersIntegrationTest extends BaseInteg
         performGetOffersNotExistingId
                 .andExpect(status().isNotFound())
                 .andExpect(content().json("""
-                {
-                  "message": "Offer with id 9999 not found",
-                  "status": "404 NOT_FOUND"
-                }
-                """));
+                        {
+                          "message": "Offer with id 9999 not found",
+                          "status": "404 NOT_FOUND"
+                        }
+                        """));
         //step 12: user made GET /offers/1000 and system returned OK(200) with offer
         //step 13: there are 2 new offers in external HTTP server
         //step 14: scheduler ran 3rd time and made GET to external server and system added 2 new offers with ids: 3000 and 4000 to database
         //step 15: user made GET /offers with header “Authorization: Bearer AAAA.BBBB.CCC” and system returned OK(200) with 4 offers with ids: 1000,2000, 3000 and 4000
+
+        //step 16: user made POST /offers with header “Authorization: Bearer AAAA.BBBB.CCC” and offer as body and system returned CREATED(201) with saved offer
+        //given&when
+        ResultActions perform3 = mockMvc.perform(post("/offers").content("""
+                          {
+                                "companyName": "someCompany",
+                                "position": "somePosition",
+                                "salary": "7 000 - 9 000 PLN",
+                                "offerUrl": "https://newoffers.pl/offer"
+                                }
+                        """)
+                .contentType(MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8")
+        );
+
+        String contentAsString3 = perform3.andExpect(status().isCreated())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        OfferResponseDto addedOffer = objectMapper.readValue(contentAsString3, OfferResponseDto.class);
+        String id1 = addedOffer.id();
+        //then
+        assertAll(
+                () -> assertThat(addedOffer.offerUrl()).isEqualTo("https://newoffers.pl/offer"),
+                () -> assertThat(addedOffer.companyName()).isEqualTo("someCompany"),
+                () -> assertThat(addedOffer.salary()).isEqualTo("7 000 - 9 000 PLN"),
+                () -> assertThat(addedOffer.position()).isEqualTo("somePosition"),
+                () -> assertThat(id).isNotNull()
+        );
+
+        //step 17: user made GET /offers with header “Authorization: Bearer AAAA.BBBB.CCC” and system returned OK(200) with 1 offer
+
+        String offerSaved = mockMvc.perform(get(offersUrl).contentType(MediaType.APPLICATION_JSON)).andReturn().getResponse().getContentAsString();
+        List<OfferResponseDto>savedOffers = objectMapper.readValue(offerSaved, new TypeReference<>() {
+        });
+
+        assertThat(savedOffers).size().isEqualTo(1);
     }
 
-    @Test
-    void getScenarioUserWantToSeeOffersIntegrationTest() {
+        @Test
+        void getScenarioUserWantToSeeOffersIntegrationTest () {
+        }
     }
-}
+
