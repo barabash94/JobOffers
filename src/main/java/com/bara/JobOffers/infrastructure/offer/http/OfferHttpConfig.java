@@ -32,9 +32,14 @@ public class OfferHttpConfig {
 
 
     @Bean
-    public OfferFetchable remoteOfferClient(RestTemplate restTemplate,
-                                            @Value("${offer.http.client.config.uri}") String uri)
-                                            {
-        return new OfferHttpClient(restTemplate, uri );
+    public OfferFetchable remoteOfferClient(
+            RestTemplate restTemplate,
+            @Value("${offer.http.client.config.uri:http://example.com}") String uri,
+            @Value("${offer.http.client.config.port}") int port) {
+
+        System.out.println("URI = " + uri);
+        System.out.println("PORT = " + port);
+
+        return new OfferHttpClient(restTemplate, uri, port);
     }
 }

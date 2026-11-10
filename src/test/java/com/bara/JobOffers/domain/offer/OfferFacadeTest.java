@@ -4,6 +4,7 @@ import com.bara.JobOffers.domain.offer.dto.OfferRequestDto;
 import com.bara.JobOffers.domain.offer.dto.OfferResponseDto;
 import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.Test;
+import org.springframework.dao.DuplicateKeyException;
 
 import java.util.List;
 
@@ -91,7 +92,7 @@ class OfferFacadeTest {
         );
         // then
         assertThat(thrown)
-                .isInstanceOf(OfferDuplicateException.class);
+                .isInstanceOf(DuplicateKeyException.class);
     }
 
     @Test
