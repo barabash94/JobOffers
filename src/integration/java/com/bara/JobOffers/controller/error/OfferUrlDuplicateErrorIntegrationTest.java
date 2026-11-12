@@ -22,7 +22,11 @@ public class OfferUrlDuplicateErrorIntegrationTest extends BaseIntegrationTest {
 
     @DynamicPropertySource
     public static void propertyOverride(DynamicPropertyRegistry registry) {
+
+        System.out.println("WIREMOCK PORT = " + wireMockServer.getPort());
         registry.add("spring.mongodb.uri", mongoDBContainer::getReplicaSetUrl);
+        registry.add("offer.http.client.config.uri", () -> WIRE_MOCK_HOST);
+        registry.add("offer.http.client.config.port", wireMockServer::getPort);
     }
 
     @Test
@@ -44,7 +48,7 @@ public class OfferUrlDuplicateErrorIntegrationTest extends BaseIntegrationTest {
         //then
         perform.andExpect(status().isCreated());
 
-    //STEP 2
+        //STEP 2
         ResultActions perform2 = mockMvc.perform(post("/offers")
                 .content("""
                              {

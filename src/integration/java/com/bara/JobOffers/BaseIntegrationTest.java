@@ -24,18 +24,16 @@ import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMoc
 @AutoConfigureMockMvc
 @Testcontainers
 public class BaseIntegrationTest {
-
-
     public static final String WIRE_MOCK_HOST = "http://localhost";
-
     @Container
-    public static final MongoDBContainer mongoDBContainer =  new MongoDBContainer(DockerImageName.parse("mongo:7.0"));;
+    public static final MongoDBContainer mongoDBContainer = new MongoDBContainer(DockerImageName.parse("mongo:7.0"));
     @RegisterExtension
     public static WireMockExtension wireMockServer = WireMockExtension.newInstance()
             .options(wireMockConfig().dynamicPort())
             .build();
     @Autowired
     public ObjectMapper objectMapper;
+    ;
     @Autowired
     public MockMvc mockMvc;
 
