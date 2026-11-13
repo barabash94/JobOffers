@@ -16,7 +16,11 @@ public class LoginAndRegisterFacade {
 
     public UserDto findByUsername(String username) {
         return repository.findByUsername(username)
-                .map(user -> new UserDto(user.id(), user.password(), user.username()))
+                .map(user -> new UserDto(
+                        user.id(),
+                        user.username(),
+                        user.password()
+                ))
                 .orElseThrow(() -> new BadCredentialsException(USER_NOT_FOUND));
     }
 

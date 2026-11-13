@@ -7,7 +7,6 @@ import java.util.Optional;
 @Repository
 public interface LoginRepository  extends MongoRepository<User, String> {
 
-    User save(User user);
 
 
     Optional<User> findByUsername(String username);
