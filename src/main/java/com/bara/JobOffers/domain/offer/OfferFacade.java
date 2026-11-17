@@ -2,7 +2,7 @@ package com.bara.JobOffers.domain.offer;
 
 import com.bara.JobOffers.domain.offer.dto.OfferRequestDto;
 import com.bara.JobOffers.domain.offer.dto.OfferResponseDto;
-import org.springframework.stereotype.Component;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.util.List;
 
@@ -16,7 +16,8 @@ public class OfferFacade {
         this.offerService = offerService;
     }
 
-    public List<OfferResponseDto> findAllOfferts() {
+    @Cacheable(cacheNames = "jobOffers")
+    public List<OfferResponseDto> findAllOffers() {
         return offerRepository.findAll().stream()
                 .map(OfferMapper::mapFromOfferToOfferDto)
                 .toList();

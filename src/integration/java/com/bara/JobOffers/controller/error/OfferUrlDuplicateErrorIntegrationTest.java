@@ -4,6 +4,7 @@ package com.bara.JobOffers.controller.error;
 import com.bara.JobOffers.BaseIntegrationTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.ResultActions;
@@ -30,6 +31,7 @@ public class OfferUrlDuplicateErrorIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
+    @WithMockUser
     public void should_throw_duplicate_key_exception() throws Exception {
         //STEP 1
         //given

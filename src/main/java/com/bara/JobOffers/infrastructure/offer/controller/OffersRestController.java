@@ -1,6 +1,5 @@
 package com.bara.JobOffers.infrastructure.offer.controller;
 
-import com.bara.JobOffers.domain.offer.Offer;
 import com.bara.JobOffers.domain.offer.OfferFacade;
 import com.bara.JobOffers.domain.offer.dto.OfferRequestDto;
 import com.bara.JobOffers.domain.offer.dto.OfferResponseDto;
@@ -26,7 +25,7 @@ public class OffersRestController {
     @Operation(summary = "Get all offers")
     @GetMapping
     public ResponseEntity<List<OfferResponseDto>> fetchAllOffers() {
-        List<OfferResponseDto> allOfferts = offerFacade.findAllOfferts();
+        List<OfferResponseDto> allOfferts = offerFacade.findAllOffers();
         return ResponseEntity.ok(allOfferts);
     }
 

@@ -21,7 +21,7 @@ class OfferFacadeTest {
     void it_should_find_all_offers() {
         //given
         //when
-        List<OfferResponseDto> allOffers = testFacade.findAllOfferts();
+        List<OfferResponseDto> allOffers = testFacade.findAllOffers();
         //then
         assertThat(allOffers.size()).isEqualTo(2);
     }
@@ -51,7 +51,7 @@ class OfferFacadeTest {
     @Test
     void it_should_save_offer_to_database() {
         // given
-        int sizeBeforeSave = testFacade.findAllOfferts().size();
+        int sizeBeforeSave = testFacade.findAllOffers().size();
 
         OfferRequestDto newOffer = new OfferRequestDto(
                 "Asseco",
@@ -64,7 +64,7 @@ class OfferFacadeTest {
         testFacade.saveOffer(newOffer);
 
         // then
-        List<OfferResponseDto> offersAfterSave = testFacade.findAllOfferts();
+        List<OfferResponseDto> offersAfterSave = testFacade.findAllOffers();
 
         assertThat(offersAfterSave).hasSize(sizeBeforeSave + 1);
         assertThat(offersAfterSave)

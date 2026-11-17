@@ -47,9 +47,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/swagger-ui/**",
-                                "/v3/api-docs",
+                                "/v3/api-docs/**",
                                 "/webjars/**",
+                                "/token",
                                 "/token/**",
+                                "/register",
                                 "/register/**",
                                 "/swagger-resources/**"
                         ).permitAll()
@@ -68,11 +70,10 @@ public class SecurityConfig {
                         )
                 )
                 .addFilterBefore(
-                        (Filter) jwtAuthTokenFilter,
+                        jwtAuthTokenFilter,
                         UsernamePasswordAuthenticationFilter.class
                 );
 
         return httpSecurity.build();
     }
-
 }
